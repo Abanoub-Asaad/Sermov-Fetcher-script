@@ -1,24 +1,23 @@
 #!/bin/bash
 
 #================================================================
-# Author:   	  Abanoub Asaad			   		#
-# Version:   	  0.1				          	#
+# Author:   	  Abanoub Asaad			   						#
+# Version:   	  0.1				     				     	#
 # My GitHub:	  https://github.com/Abanoub-Asaad    	        #
-# Note:		  This script depends on IMDb site 		#
+# Note:		  	  This script depends completely on IMDb  	 	#
 #===============================================================#
 
-# Print 
+# Print the opening sentence
 tput setaf 4; echo "========================================================================"
-echo "Hi, Type the name of the Movie or Series you want to search about"
-tput setaf 2;
-
-# Read the movie or series name
-read searchText
-tput setaf 4; echo "========================================================================"
-tput setaf 7;
+echo "Hi, Type the name of the Movie or Series that you want"
 
 
-# Download the result page for the specified search
+# Read the movie or series name from the user
+tput setaf 2; read searchText
+tput setaf 4; echo "========================================================================"; tput setaf 7;
+
+
+# Download the resultant web page for the specified search
 wget -O "$searchText-search.html" "http://www.imdb.com/find?q=$searchText"
 
 
@@ -26,11 +25,11 @@ wget -O "$searchText-search.html" "http://www.imdb.com/find?q=$searchText"
 sed -e '/Titles<\/h3>/,/findMoreMatches/!d' "$searchText-search.html" > "partialContentFile.txt"
 
 
-# Get the result movies' links from html file
+# Get the resultant movies' sub links from a html file
 grep -E -o "\/title\/[a-zA-Z0-9]+\/" "partialContentFile.txt" > "filesToDownload.txt"
 
 
-# Get the result movies' names
+# Get the resultant movies' names
 grep -P -o "(?<=>)([a-zA-Z0-9&: _-]+)(?=<\/a>[\(\) a-zA-Z0-9 _-]*\([0-9]+\))" "partialContentFile.txt" > "movieNames.txt"
 
 
@@ -42,16 +41,15 @@ grep -P -o "(?<=<\/a> )(\([0-9]+\))(?= )" "partialContentFile.txt" > "movieYears
 > "movieNameYear.txt"
 
 
-# Use different file descriptors to read from and work with two files
+# Use different file descriptors to read from two files and combine them in "movieNameYear.txt file"
 while read -r -u3 movieName; read -r -u4 movieYear;
 do
  echo "$movieName" "$movieYear" >> "movieNameYear.txt"
 done 3<movieNames.txt 4<movieYears.txt
 
 
-
-# Read from the file that was written to
-j=0
+# Read from the file that was written to and store in the names and years in an array 
+j=0 
 
 while read line
 do
@@ -66,7 +64,7 @@ done < "movieNameYear.txt"
 
 
 
-# Since the link are duplicated due 
+# Since the link are duplicated because of the link of title and the link of image, so I filter them here 
 moviefoldername=movies
 mkdir $moviefoldername
 
@@ -96,18 +94,16 @@ done < "filesToDownload.txt"
 
 
 
-# Now print the files in the movies directory
+# The Output here :)
 tput setaf 4; echo "===============================================" 
 
 for fileName in `ls $moviefoldername/`
 do
-	#echo "$fileName"
-	
-	# Sample rating tag block
-	#<span itemprop="ratingValue">6.4</span></strong>
-	
+
 	tput setaf 1; echo "Original name and Year of Release: "
 	tput setaf 2; echo "$fileName"	
+
+	#<span itemprop="ratingValue">6.4</span></strong>
 	tput setaf 1; echo "Rating: ";
 	tput setaf 2;
 	grep -P -o "(?<=<span itemprop=\"ratingValue\">)([0-9][.]?[0-9]?)(?=<\/span><\/strong>)" "$moviefoldername/$fileName"
@@ -125,8 +121,6 @@ do
 done
 	
 
-
-tput setaf 7;
 
 # Make directory to put in it all related files
 if [[ -d Sermov\ Fetcher\ related ]]
@@ -146,5 +140,8 @@ mv "movieYears.txt" Sermov\ Fetcher\ related
 mv "movieNameYear.txt" Sermov\ Fetcher\ related
 mv movies Sermov\ Fetcher\ related
 
-# rm -r Sermov\ Fetcher\ related
+# Remove the whole director which contains the used files 
+rm -r Sermov\ Fetcher\ related
 
+# Change the terminal color to the default "White"
+tput setaf 7;

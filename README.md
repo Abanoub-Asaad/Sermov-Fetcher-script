@@ -1,2 +1,11 @@
 # Sermov-Fetcher-script
-is a bash script enables you to write a name of any movie or series and get details about it like the director, year of release, storyline, etc
+- Input
+  - Movie or Series name
+- Output
+  - IMDb rating, 
+  - Director 
+  -  Year of release
+  - Stars
+  - Storyline 
+- Notes 
+  - Sermov stands for Series and Movies
