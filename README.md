@@ -8,7 +8,10 @@
   - Stars (Actors or Actress)
   - Storyline 
 - Notes 
-  - Sermov stands for Series and Movies.
+  - Sermov stands for Series and Movies
+  - How to use it?
+    - Make sure to `cd` into the directory when running from terminal
+    - run the following command `bash sermov.sh`
   
     
   <div align="center">
