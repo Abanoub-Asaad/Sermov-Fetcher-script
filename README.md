@@ -2,10 +2,10 @@
 - Input
   - Movie or Series name
 - Output
-  - IMDb rating, 
+  - IMDb rating
   - Director 
   -  Year of release
-  - Stars
+  - Stars (Actors or Actress)
   - Storyline 
 - Notes 
-  - Sermov stands for Series and Movies
+  - Sermov stands for Series and Movies.
